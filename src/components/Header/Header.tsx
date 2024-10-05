@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import React, { useContext } from "react";
 import { FC } from "react";
@@ -16,7 +17,7 @@ const Header: FC<HeaderProps> = ({ reduced }) => {
         <div className="container">
           <div className="header__inner">
             <Link href="/">
-              <img src="cosm-logo.png" alt="Cosm logo" width={100} />
+              <Image src="/cosm-logo.png" alt="Cosm logo" width={100} height={29} />
             </Link>
 
             {!reduced && cartQuantity > 0 && (

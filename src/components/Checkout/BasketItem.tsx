@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { FC, PropsWithChildren, useContext } from "react";
 import { CartContext } from "~/context/cart-context";
 import { CheckOutItems, HandleUpdateCart, Product } from "~/types/type";
@@ -47,11 +48,11 @@ const BasketItem: BasketItemComponent = ({ product, quantity, handleUpdateCart, 
   );
 };
 
-const Image: FC = () => {
+const BasketImage: FC = () => {
   const { product } = useBasketItemContext();
   return (
     <div className="cart-item__image">
-      <img src={product.image} alt={product.name} />
+      <Image src={product.image} alt={product.name} width={600} height={600} loading="lazy" />
     </div>
   );
 };
@@ -88,7 +89,7 @@ const UpdateQuantity: FC = () => {
   );
 };
 
-BasketItem.Image = Image;
+BasketItem.Image = BasketImage;
 BasketItem.Title = Title;
 BasketItem.Price = Price;
 BasketItem.UpdateQuantity = UpdateQuantity;
