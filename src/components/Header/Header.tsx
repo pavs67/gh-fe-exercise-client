@@ -8,8 +8,7 @@ interface HeaderProps {
 }
 
 const Header: FC<HeaderProps> = ({ reduced }) => {
-  const { cartItems, cartTotal, cartQuantity } = useContext(CartContext);
-  console.log("🚀 ~ cartItems:", cartItems);
+  const { cartTotal, cartQuantity } = useContext(CartContext);
 
   return (
     <>
