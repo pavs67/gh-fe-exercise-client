@@ -120,7 +120,7 @@ export default function Page({ products, error }: ProductListProps) {
                     {addToCartError && <span>There was an error, please try again.</span>}
 
                     <button className="btn" onClick={handleViewBasket} disabled={loading}>
-                      View basket {loading && "Loading"}
+                      {loading ? "Loading" : "View basket"}
                     </button>
                   </div>
                 </div>
