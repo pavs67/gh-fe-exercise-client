@@ -3,15 +3,17 @@ import React, { useContext } from "react";
 import { FC } from "react";
 import { CartContext } from "~/context/cart-context";
 
-interface HeaderProps {}
+interface HeaderProps {
+  reduced?: boolean;
+}
 
-const Header: FC<HeaderProps> = () => {
+const Header: FC<HeaderProps> = ({ reduced }) => {
   const { cartItems, cartTotal, cartQuantity } = useContext(CartContext);
   console.log("🚀 ~ cartItems:", cartItems);
 
   return (
     <>
-      <header className="header">
+      <header className={`header ${reduced ? "header--reduced" : ""}`}>
         <div className="container">
           <div className="header__inner">
             <Link href="/">
@@ -19,7 +21,7 @@ const Header: FC<HeaderProps> = () => {
               {/* <img src="cosmetic-logo.png" alt="Cosmetic logo" width={100} /> */}
             </Link>
 
-            {cartQuantity > 0 && (
+            {!reduced && cartQuantity > 0 && (
               <div className="header__cart">
                 £{cartTotal} ({cartQuantity})
               </div>

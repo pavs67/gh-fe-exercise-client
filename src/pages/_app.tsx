@@ -18,7 +18,6 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <CartContextProvider>
       <div className={`${inter.className} ${inter.variable}`}>
-        <Header />
         <Component {...pageProps} />
       </div>
     </CartContextProvider>

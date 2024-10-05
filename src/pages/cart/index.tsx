@@ -1,6 +1,8 @@
 import Link from "next/link";
+import React from "react";
 import { useContext, useEffect, useState } from "react";
 import BasketItem from "~/components/Checkout/BasketItem";
+import Header from "~/components/Header/Header";
 import { CartContext } from "~/context/cart-context";
 import { CheckOutItems, Product } from "~/types/type";
 
@@ -12,7 +14,7 @@ export default function Page({}: CartProps) {
   const [error, setError] = useState(false);
   const [checkoutComplete, setCheckoutComplete] = useState(false);
 
-  const { incrementItem, decrementItem, loading, orderId } = useContext(CartContext);
+  const { incrementItem, decrementItem, loading, orderId, clearCart } = useContext(CartContext);
 
   const getCheckoutItems = async (orderId: number) => {
     setLoading(true);
@@ -84,6 +86,7 @@ export default function Page({}: CartProps) {
 
       if (res.status === 204) {
         setCheckoutComplete(true);
+        clearCart();
       } else {
         setCheckoutComplete(false);
       }
@@ -100,56 +103,66 @@ export default function Page({}: CartProps) {
     0
   );
 
-  if (orderId === null) {
-    return (
-      <div className="container">
-        Your basket is empty <Link href="/">View products</Link>
-      </div>
-    );
-  }
-
   if (error) return <p>There was an error loading your cart please try again</p>;
-  if (!data) return <p>No data</p>;
-
-  if (checkoutComplete) {
-    return <p>Complete</p>;
-  }
 
   return (
-    <section className="cart">
-      <div className="container">
-        <h1 className="cart__title">Your basket</h1>
+    <>
+      <Header reduced={true} />
 
-        {isLoading && <div>Loading</div>}
+      <section className="cart">
+        <div className="container">
+          {!checkoutComplete && (orderId === null || data === null) && (
+            <>
+              <p>
+                Your basket is empty <Link href="/">View products</Link>
+              </p>
+            </>
+          )}
 
-        <div className="cart__inner">
-          <div className="cart-list">
-            {data.products
-              .filter((i) => i.quantity > 0)
-              .map((product) => (
-                <BasketItem
-                  product={product.product}
-                  quantity={product.quantity}
-                  handleUpdateCart={handleUpdateCart}
-                >
-                  <BasketItem.Image />
-                  <BasketItem.Title />
-                  <BasketItem.Price />
-                  <BasketItem.UpdateQuantity />
-                </BasketItem>
-              ))}
-          </div>
+          {checkoutComplete && (
+            <>
+              <h1>Success</h1>
+              <p>You're all done!</p>
+            </>
+          )}
 
-          <div className="cart-totals">
-            <h3 className="cart-totals__title">Total</h3>
-            <div className="cart-totals__price">£{totalCost}</div>
+          {!checkoutComplete && data && (
+            <>
+              <h1 className="cart__title">Your basket</h1>
 
-            <button className="btn cart-totals__btn" onClick={handleCheckout}>
-              Secure Checkout
-            </button>
-          </div>
+              {isLoading && <div>Loading</div>}
+
+              <div className="cart__inner">
+                <div className="cart-list">
+                  {data.products
+                    .filter((i) => i.quantity > 0)
+                    .map((product) => (
+                      <BasketItem
+                        product={product.product}
+                        quantity={product.quantity}
+                        handleUpdateCart={handleUpdateCart}
+                      >
+                        <BasketItem.Image />
+                        <BasketItem.Title />
+                        <BasketItem.Price />
+                        <BasketItem.UpdateQuantity />
+                      </BasketItem>
+                    ))}
+                </div>
+
+                <div className="cart-totals">
+                  <h3 className="cart-totals__title">Total</h3>
+                  <div className="cart-totals__price">£{totalCost}</div>
+
+                  <button className="btn cart-totals__btn" onClick={handleCheckout}>
+                    Secure Checkout
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

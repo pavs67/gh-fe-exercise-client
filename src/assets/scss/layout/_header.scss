@@ -7,6 +7,12 @@
   padding: 1em 0;
   background-color: #fff;
 
+  &--reduced {
+    .header__inner {
+      justify-content: center;
+    }
+  }
+
   &__inner {
     display: flex;
     justify-content: space-between;

@@ -11,18 +11,21 @@ interface CartState {
   decrementItem: (product: Product) => void;
   loading: boolean;
   createNewOrder: () => Promise<boolean>;
+  clearCart: () => void;
 }
 
 const actions = {
   ADD_ITEM: "ADD_ITEM",
   REMOVE_ITEM: "REMOVE_ITEM",
   ADD_ORDER_ID: "ADD_ORDER_ID",
+  CLEAR_CART: "CLEAR_CART",
 } as const;
 
 type CartAction =
   | { type: typeof actions.ADD_ITEM; product: Product }
   | { type: typeof actions.REMOVE_ITEM; product: Product }
-  | { type: typeof actions.ADD_ORDER_ID; orderId: number };
+  | { type: typeof actions.ADD_ORDER_ID; orderId: number }
+  | { type: typeof actions.CLEAR_CART };
 
 const initialCartState: CartState = {
   orderId: null,
@@ -31,6 +34,7 @@ const initialCartState: CartState = {
   cartItems: [],
   incrementItem: () => {},
   decrementItem: () => {},
+  clearCart: () => {},
   loading: false,
   createNewOrder: async () => false,
 };
@@ -98,6 +102,9 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         orderId: action.orderId,
       };
     }
+    case actions.CLEAR_CART: {
+      return initialCartState;
+    }
 
     default:
       return state;
@@ -147,6 +154,7 @@ const CartContextProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
       cartTotal: state.cartTotal,
       cartQuantity: state.cartQuantity,
       createNewOrder,
+      clearCart: () => dispatch({ type: actions.CLEAR_CART }),
     }),
     [state.cartItems, loading, state.orderId]
   );
