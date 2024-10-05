@@ -19,11 +19,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let error = false;
 
   try {
-    const res = await fetch(`${process.env.API_URL}/products?norandom`);
-    const resData = await res.json();
+    const res = await fetch(`${process.env.API_URL}/products`);
 
-    if (Array.isArray(resData)) {
-      products = resData;
+    if (res.status === 200) {
+      products = await res.json();
+    } else {
+      error = true;
     }
   } catch (err) {
     error = true;
@@ -50,10 +51,6 @@ export default function Page({ products, error }: ProductListProps) {
     }
   }, [products]);
 
-  if (error) {
-    return <div>Error loading products. Please try again later.</div>;
-  }
-
   const handleViewBasket = async () => {
     setAddToCartError(false);
 
@@ -63,7 +60,6 @@ export default function Page({ products, error }: ProductListProps) {
       router.push(`/cart`);
     } else {
       setAddToCartError(true);
-      // error
     }
   };
 
@@ -83,6 +79,8 @@ export default function Page({ products, error }: ProductListProps) {
               <div>Loading</div>
             ) : (
               <>
+                {error && <div>Error loading products. Please try again later.</div>}
+
                 {groupedProducts.map((group) => (
                   <div
                     className="product-list-group"
