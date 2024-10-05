@@ -2,10 +2,41 @@
   border: 1px solid #e3e3e3;
   padding: 1rem;
 
+  &--selected {
+    border-color: red;
+  }
+
   &__image {
+    background: #ebeae6;
+    display: block;
+    height: 0;
+    overflow: hidden;
+    padding-bottom: 80%;
+    position: relative;
+    width: 100%;
+
+    img {
+      bottom: 0;
+      display: block;
+      height: 100%;
+      left: 0;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
   }
 
   &__title {
     margin-top: 0.5rem;
+  }
+
+  &__btns {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__btn-add-to-basket {
+    flex-grow: 1;
   }
 }
