@@ -1,8 +1,8 @@
-import "~/app.scss";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
-import ProductCard from "~/components/Product/ProductCard";
+import "~/app.scss";
 import Header from "~/components/Header/Header";
+import CartContextProvider from "~/context/cart-context";
 
 // if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
 // 	require('../mocks')
@@ -16,9 +16,11 @@ const inter = Inter({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <div className={`${inter.className} ${inter.variable}`}>
-      <Header />
-      <Component {...pageProps} />
-    </div>
+    <CartContextProvider>
+      <div className={`${inter.className} ${inter.variable}`}>
+        <Header />
+        <Component {...pageProps} />
+      </div>
+    </CartContextProvider>
   );
 }
