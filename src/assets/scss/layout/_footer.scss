@@ -1,0 +1,158 @@
+.footer {
+  color: $white;
+  background-color: $black;
+
+  &__title {
+    font-size: 60px;
+    color: $white;
+    text-align: center;
+    line-height: 1.1;
+    margin: 0 0 0.4em;
+
+    br {
+      display: none;
+    }
+
+    @media (max-width: 1200px) {
+      font-size: 45px;
+    }
+
+    @media (max-width: $med) {
+      font-size: 40px;
+    }
+
+    @media (max-width: $sm) {
+      font-size: 33px;
+
+      br {
+        display: block;
+      }
+    }
+
+    span {
+      color: $yellow;
+      display: block;
+    }
+  }
+
+  &__sub-title {
+    font-size: 18px;
+    color: $white;
+    font-weight: 500;
+
+    br {
+      display: none;
+    }
+
+    @media (max-width: $med) {
+      font-size: 16px;
+
+      br {
+        display: block;
+      }
+    }
+
+    @media (max-width: $sm) {
+      font-size: 15px;
+    }
+  }
+
+  &__btn {
+    margin-top: 0.8em;
+
+    @media (max-width: $sm) {
+      width: 246px;
+    }
+  }
+
+  &__top {
+    padding-top: 130px;
+    text-align: center;
+
+    @media (max-width: $sm) {
+      padding-top: 67px;
+    }
+  }
+
+  &__bottom {
+    padding-top: 75px;
+    padding-bottom: 75px;
+
+    @media (max-width: $sm) {
+      padding-top: 70px;
+      padding-bottom: 1em;
+    }
+  }
+
+  &__copyright {
+    color: #727272;
+    font-size: 13px;
+
+    @media (max-width: $sm) {
+      text-align: center;
+    }
+  }
+}
+
+.footer-bottom {
+  display: flex;
+  padding-top: 75px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 70px;
+  border-top: 1px solid #4f4f4f;
+
+  @media (max-width: $sm) {
+    flex-direction: column;
+  }
+
+  &__left {
+    display: inline-flex;
+    gap: 30px;
+
+    @media (max-width: $sm) {
+      margin-bottom: 2em;
+    }
+
+    a {
+      text-decoration: none;
+      font-size: 15px;
+      color: $white;
+
+      @media (max-width: $sm) {
+        font-size: 13px;
+      }
+
+      &:hover {
+        color: $yellow;
+      }
+    }
+  }
+
+  &__right {
+    display: inline-flex;
+    gap: 30px;
+
+    @media (max-width: $sm) {
+      gap: 20px;
+    }
+
+    @media (max-width: 400px) {
+      gap: 10px;
+    }
+
+    a {
+      color: $grey-a7;
+      font-size: 13px;
+      text-decoration: none;
+
+      @media (max-width: $sm) {
+        font-size: 13px;
+      }
+
+      &:hover {
+        color: $yellow;
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+/*
+    MAIN
+*/
+
+/* global box-sizing */
+*,
+*:after,
+*:before {
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  margin: 0;
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
+  font: 400 $basefont var(--font-inter, "san-serif");
+  color: black;
+  margin: 0;
+  height: 100%;
+  background-color: #fff;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: bottom;
+}
+
+a {
+  color: black;
+  font-weight: 500;
+  text-decoration: underline;
+  transition: none;
+
+  &:focus,
+  &:hover {
+    color: grey;
+  }
+}
+
+a:focus {
+  outline: 0;
+}
+
+a:hover,
+a:active {
+  outline: 0;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+b,
+strong {
+  font-weight: 600;
+}
+
+hr {
+  margin: 3em 0;
+  color: #bfbfbf;
+}

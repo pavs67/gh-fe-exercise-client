@@ -1,0 +1,12 @@
+.product-page {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.product-list {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(200px, 3fr));
+  gap: 20px;
+}

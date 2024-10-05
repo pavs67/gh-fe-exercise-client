@@ -1,0 +1,21 @@
+// FontAwesome
+$fa-font-display: swap;
+$fa-font-path: "/assets/fonts";
+
+// MEDIA QUERIES
+$lrg: 1200px;
+$med: 1024px;
+$sm: 768px;
+$mob: 600px;
+$iphone: 480px;
+
+// FONTS
+$fontawesome: "Font Awesome 6 Pro";
+
+$inter: var(--font-inter, "Inter");
+
+$heading-font: $inter;
+$site-font: $inter;
+
+// FONT SIZES
+$basefont: 16px;
