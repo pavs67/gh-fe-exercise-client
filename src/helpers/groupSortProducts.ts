@@ -18,10 +18,9 @@ export const groupSortProducts = (products: Product[]) => {
 
     return acc;
   }, []);
-  console.log("🚀 ~ grouped ~ grouped:", grouped);
 
   grouped.forEach((group) => {
-    group.products.sort((a, b) => a.name.localeCompare(b.name));
+    group.products.sort((a, b) => a.name.localeCompare(b.name, "en", { numeric: true }));
   });
 
   grouped.sort((a, b) => a.category.localeCompare(b.category));
