@@ -1,4 +1,4 @@
-import { createContext, useMemo, useReducer, useState } from "react";
+import { createContext, useCallback, useMemo, useReducer, useState } from "react";
 import { cloneDeep } from "lodash";
 import { CartItem, Product } from "~/types/type";
 
@@ -115,7 +115,7 @@ const CartContextProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
   const [loading, setLoading] = useState(false);
 
-  const createNewOrder = async () => {
+  const createNewOrder = useCallback(async () => {
     setLoading(true);
 
     try {
@@ -142,7 +142,7 @@ const CartContextProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [state.cartItems]);
 
   const value = useMemo(
     () => ({
