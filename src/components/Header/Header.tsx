@@ -17,8 +17,7 @@ const Header: FC<HeaderProps> = ({ reduced }) => {
         <div className="container">
           <div className="header__inner">
             <Link href="/">
-              Cosmetic Company Logo
-              {/* <img src="cosmetic-logo.png" alt="Cosmetic logo" width={100} /> */}
+              <img src="cosm-logo.png" alt="Cosm logo" width={100} />
             </Link>
 
             {!reduced && cartQuantity > 0 && (
