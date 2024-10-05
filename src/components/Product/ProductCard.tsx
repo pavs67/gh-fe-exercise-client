@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { PropsWithChildren, FC, useContext } from "react";
 import { CartContext } from "~/context/cart-context";
 import { Product } from "~/types/type";
@@ -43,11 +44,11 @@ const ProductCard: ProductCardComponent = ({ product, selected, children }) => {
   );
 };
 
-const Image: FC = () => {
+const ProductImage: FC = () => {
   const { product } = useProductContext();
   return (
     <div className="product-card__image">
-      <img src={product.image} alt={product.name} />
+      <Image src={product.image} alt={product.name} width={600} height={600} loading="lazy" />
     </div>
   );
 };
@@ -113,7 +114,7 @@ const AddToCartBtn: FC = () => {
   );
 };
 
-ProductCard.Image = Image;
+ProductCard.Image = ProductImage;
 ProductCard.Title = Title;
 ProductCard.Description = Description;
 ProductCard.Price = Price;
