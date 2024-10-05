@@ -5,34 +5,60 @@ import { Category } from "~/types/type";
 interface CategoryListProps {}
 
 const CategoryList: FC<CategoryListProps> = () => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
 
-  const getCategories = async () => {
+  const getCategories = async (cont: AbortController) => {
+    setLoading(true);
+
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
-      const resData = await res.json();
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+        signal: cont.signal,
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+
+      const resData: Category[] = await res.json();
 
       if (Array.isArray(resData)) {
-        setCategories(resData);
+        setCategories(resData.sort((a, b) => a.name.localeCompare(b.name)));
       }
     } catch (error) {
-      console.log(error);
-      error = true;
+      if (error instanceof Error) {
+        if (error.name === "AbortError") {
+          console.log("Fetch aborted");
+        } else {
+          console.error("Error fetching categories:", error.message);
+        }
+      } else {
+        console.error("Unexpected error:", error);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    getCategories();
+    const cont = new AbortController();
 
-    return () => {};
+    getCategories(cont);
+
+    return () => {
+      cont.abort();
+    };
   }, []);
 
   return (
     <div className="category-list">
+      <h3>Categories</h3>
+
       {categories.map((category, index) => (
-        <Link key={index} href={`/products/${category.name.toLocaleLowerCase()}`}>
+        <a key={index} href={`#${category.name.toLocaleLowerCase()}`}>
           {category.name}
-        </Link>
+        </a>
       ))}
     </div>
   );
