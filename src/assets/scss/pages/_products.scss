@@ -2,11 +2,34 @@
   display: flex;
   justify-content: space-between;
   gap: 30px;
+
+  &__sidebar {
+    width: 180px;
+  }
+  &__products {
+    flex-grow: 1;
+  }
+
+  &__basket {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem;
+    background-color: #fff;
+  }
 }
 
 .product-list {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(3, minmax(200px, 3fr));
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
   gap: 20px;
+
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+
+  @media (max-width: 800px) {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
 }
