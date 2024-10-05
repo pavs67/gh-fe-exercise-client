@@ -5,6 +5,8 @@ import { CartItem, Product } from "~/types/type";
 interface CartState {
   orderId: number | null;
   cartItems: CartItem[];
+  cartQuantity: number;
+  cartTotal: number;
   incrementItem: (product: Product) => void;
   decrementItem: (product: Product) => void;
   loading: boolean;
@@ -24,6 +26,8 @@ type CartAction =
 
 const initialCartState: CartState = {
   orderId: null,
+  cartQuantity: 0,
+  cartTotal: 0,
   cartItems: [],
   incrementItem: () => {},
   decrementItem: () => {},
@@ -38,22 +42,26 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     case actions.ADD_ITEM: {
       const existingItemIndex = state.cartItems.findIndex((item) => item.id === action.product.id);
 
-      // update
-      if (existingItemIndex >= 0) {
-        const updatedItems = cloneDeep(state.cartItems);
-        updatedItems[existingItemIndex].quantity += 1;
+      const updatedItems = cloneDeep(state.cartItems);
 
-        return {
-          ...state,
-          cartItems: updatedItems,
-        };
+      if (existingItemIndex >= 0) {
+        updatedItems[existingItemIndex].quantity += 1;
       } else {
-        // add
-        return {
-          ...state,
-          cartItems: [...state.cartItems, { id: action.product.id, quantity: 1 }],
-        };
+        updatedItems.push({ id: action.product.id, quantity: 1 });
       }
+
+      const updatedCartQuantity = updatedItems.reduce((total, item) => total + item.quantity, 0);
+      const updatedCartTotal = updatedItems.reduce(
+        (total, item) => total + item.quantity * action.product.price,
+        0
+      );
+
+      return {
+        ...state,
+        cartItems: updatedItems,
+        cartQuantity: updatedCartQuantity,
+        cartTotal: updatedCartTotal,
+      };
     }
 
     case actions.REMOVE_ITEM: {
@@ -66,9 +74,18 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         // remove item if 0
         const filteredItems = updatedItems.filter((item) => item.quantity > 0);
 
+        // Recalculate cart total and quantity
+        const updatedCartQuantity = filteredItems.reduce((total, item) => total + item.quantity, 0);
+        const updatedCartTotal = filteredItems.reduce(
+          (total, item) => total + item.quantity * action.product.price,
+          0
+        );
+
         return {
           ...state,
           cartItems: filteredItems,
+          cartQuantity: updatedCartQuantity,
+          cartTotal: updatedCartTotal,
         };
       }
 
@@ -127,6 +144,8 @@ const CartContextProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
       decrementItem: (product: Product) => dispatch({ type: actions.REMOVE_ITEM, product }),
       loading,
       orderId: state.orderId,
+      cartTotal: state.cartTotal,
+      cartQuantity: state.cartQuantity,
       createNewOrder,
     }),
     [state.cartItems, loading, state.orderId]

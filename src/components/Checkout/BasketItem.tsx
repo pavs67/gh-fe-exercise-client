@@ -72,14 +72,14 @@ const UpdateQuantity: FC = () => {
   return (
     <div className="cart-item__btns">
       <button
-        className="cart-item__decrease"
+        className="btn btn--small cart-item__decrease"
         onClick={() => handleUpdateCart(product, quantity - 1, "decrement")}
       >
         -
       </button>
       <div>{quantity}</div>
       <button
-        className="btn cart-item__increase"
+        className="btn btn--small cart-item__increase"
         onClick={() => handleUpdateCart(product, quantity + 1, "increment")}
       >
         +

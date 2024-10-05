@@ -103,12 +103,11 @@ export default function Page({}: CartProps) {
   if (orderId === null) {
     return (
       <div className="container">
-        Your basket is empty <Link href="/products">View products</Link>
+        Your basket is empty <Link href="/">View products</Link>
       </div>
     );
   }
 
-  if (isLoading) return <p>Loading...</p>;
   if (error) return <p>There was an error loading your cart please try again</p>;
   if (!data) return <p>No data</p>;
 
@@ -120,6 +119,8 @@ export default function Page({}: CartProps) {
     <section className="cart">
       <div className="container">
         <h1 className="cart__title">Your basket</h1>
+
+        {isLoading && <div>Loading</div>}
 
         <div className="cart__inner">
           <div className="cart-list">
@@ -138,9 +139,14 @@ export default function Page({}: CartProps) {
                 </BasketItem>
               ))}
           </div>
+
           <div className="cart-totals">
-            £{totalCost}
-            <button onClick={handleCheckout}>Secure Checkout</button>
+            <h3 className="cart-totals__title">Total</h3>
+            <div className="cart-totals__price">£{totalCost}</div>
+
+            <button className="btn cart-totals__btn" onClick={handleCheckout}>
+              Secure Checkout
+            </button>
           </div>
         </div>
       </div>

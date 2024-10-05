@@ -83,7 +83,7 @@ const AddToCartBtn: FC = () => {
       <div className="product-card__btns">
         <button
           disabled={loading}
-          className="product-card__decrease"
+          className="btn btn--small product-card__decrease"
           onClick={() => decrementItem(product)}
         >
           -
@@ -91,7 +91,7 @@ const AddToCartBtn: FC = () => {
         <div>{found.quantity}</div>
         <button
           disabled={loading}
-          className="btn product-card__increase"
+          className="btn btn--small product-card__increase"
           onClick={() => incrementItem(product)}
         >
           +

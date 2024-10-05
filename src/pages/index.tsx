@@ -39,7 +39,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 export default function Page({ products, error }: ProductListProps) {
   const router = useRouter();
-  const { cartItems, createNewOrder, loading } = useContext(CartContext);
+  const { cartItems, cartQuantity, createNewOrder, loading } = useContext(CartContext);
   const [groupedProducts, setGroupedProducts] = useState<GroupedProducts[]>([]);
 
   useEffect(() => {
@@ -105,12 +105,16 @@ export default function Page({ products, error }: ProductListProps) {
           )}
         </div>
 
-        {cartItems.length > 0 && (
+        {cartQuantity > 0 && (
           <div className="product-page__basket">
-            {cartItems.length} items added to basket.{" "}
-            <button className="btn" onClick={handleViewBasket} disabled={loading}>
-              View basket {loading && "Loading"}
-            </button>
+            <div className="container">
+              <div className="product-page__basket-inner">
+                <div>{cartQuantity} items added to basket.</div>
+                <button className="btn" onClick={handleViewBasket} disabled={loading}>
+                  View basket {loading && "Loading"}
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -1,9 +1,10 @@
 .product-card {
   border: 1px solid #e3e3e3;
   padding: 1rem;
+  border-radius: 4px;
 
   &--selected {
-    border-color: red;
+    border-color: $blue;
   }
 
   &__image {
@@ -34,6 +35,14 @@
   &__btns {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    .btn {
+      font-size: 13px;
+      height: 36px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
   }
 
   &__btn-add-to-basket {

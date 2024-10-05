@@ -6,7 +6,7 @@ import { CartContext } from "~/context/cart-context";
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = () => {
-  const { cartItems } = useContext(CartContext);
+  const { cartItems, cartTotal, cartQuantity } = useContext(CartContext);
   console.log("🚀 ~ cartItems:", cartItems);
 
   return (
@@ -19,7 +19,11 @@ const Header: FC<HeaderProps> = () => {
               {/* <img src="cosmetic-logo.png" alt="Cosmetic logo" width={100} /> */}
             </Link>
 
-            <div className="header__cart">{cartItems.length > 0 && cartItems.length}</div>
+            {cartQuantity > 0 && (
+              <div className="header__cart">
+                £{cartTotal} ({cartQuantity})
+              </div>
+            )}
           </div>
         </div>
       </header>

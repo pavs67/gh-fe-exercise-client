@@ -1,0 +1,28 @@
+.btn {
+  padding: 0.9rem 2rem;
+  display: inline-block;
+  text-align: center;
+  border-radius: 4px;
+  background: $blue;
+  color: #fff;
+  border: 1px solid $blue;
+
+  font-size: 15px;
+  font-family: var(--font-inter, "Inter");
+  cursor: pointer;
+  line-height: calc(100% - 1px);
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 600;
+  transition: none;
+
+  &:hover {
+    border-color: $blue-light;
+    background-color: $blue-light;
+  }
+
+  &--small {
+    padding: 0.5rem 1rem;
+    font-size: 13px;
+  }
+}
