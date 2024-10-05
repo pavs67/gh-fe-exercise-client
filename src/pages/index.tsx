@@ -1,18 +1,119 @@
+import { GetStaticProps } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useContext, useState, useEffect } from "react";
 import CategoryList from "~/components/CategoryList";
+import ProductCard from "~/components/Product/ProductCard";
+import { CartContext } from "~/context/cart-context";
+import { GroupedProducts, groupSortProducts } from "~/helpers/groupSortProducts";
+import { Product } from "~/types/type";
 
-export default function Home() {
+interface ProductListProps {
+  products: Product[];
+  error: boolean;
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  let products: Product[] = [];
+  let error = false;
+
+  try {
+    const res = await fetch(`${process.env.API_URL}/products?norandom`);
+    const resData = await res.json();
+
+    if (Array.isArray(resData)) {
+      products = resData;
+    }
+  } catch (err) {
+    error = true;
+  }
+
+  return {
+    props: {
+      products,
+      error,
+    },
+    revalidate: 10,
+  };
+};
+
+export default function Page({ products, error }: ProductListProps) {
+  const router = useRouter();
+  const { cartItems, createNewOrder, loading } = useContext(CartContext);
+  const [groupedProducts, setGroupedProducts] = useState<GroupedProducts[]>([]);
+
+  useEffect(() => {
+    if (products && products.length > 0) {
+      setGroupedProducts(groupSortProducts(products));
+    }
+  }, [products]);
+
+  if (error) {
+    return <div>Error loading products. Please try again later.</div>;
+  }
+
+  const handleViewBasket = async () => {
+    const success = await createNewOrder();
+
+    if (success) {
+      router.push(`/cart`);
+    } else {
+      // error
+    }
+  };
+
   return (
-    <main>
-      <div className="container">
-        <aside>
+    <div className="container">
+      <h1>Products</h1>
+      <div className="product-page">
+        <aside className="product-page__sidebar">
           <CategoryList />
         </aside>
 
-        <section className="">
-          <Link href="/products">Products</Link>
-        </section>
+        <div className="product-page__products">
+          {router.isFallback ? (
+            <div>Loading</div>
+          ) : (
+            <>
+              {groupedProducts.map((group) => (
+                <div
+                  className="product-list-group"
+                  id={group.category.toLowerCase()}
+                  key={group.category}
+                >
+                  <h2>
+                    {group.category} ({group.products.length})
+                  </h2>
+
+                  <div className="product-list">
+                    {group.products.map((product) => (
+                      <ProductCard
+                        product={product}
+                        key={product.id}
+                        selected={cartItems.findIndex((i) => i.id === product.id) >= 0}
+                      >
+                        <ProductCard.Image />
+                        <ProductCard.Title />
+                        <ProductCard.Price />
+                        <ProductCard.AddToCartBtn />
+                      </ProductCard>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+
+        {cartItems.length > 0 && (
+          <div className="product-page__basket">
+            {cartItems.length} items added to basket.{" "}
+            <button className="btn" onClick={handleViewBasket} disabled={loading}>
+              View basket {loading && "Loading"}
+            </button>
+          </div>
+        )}
       </div>
-    </main>
+    </div>
   );
 }

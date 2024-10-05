@@ -51,12 +51,35 @@ const CategoryList: FC<CategoryListProps> = () => {
     };
   }, []);
 
+  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, el: string) => {
+    e.preventDefault();
+
+    if (typeof window !== "undefined") {
+      const element = document.getElementById(el);
+
+      if (element) {
+        const offset = 50;
+        const pos = element.getBoundingClientRect().top;
+        const top = pos + window.scrollY - offset;
+
+        window.scrollTo({
+          top: top,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
   return (
     <div className="category-list">
       <h3>Categories</h3>
 
       {categories.map((category, index) => (
-        <a key={index} href={`#${category.name.toLocaleLowerCase()}`}>
+        <a
+          key={index}
+          href={`#${category.name.toLocaleLowerCase()}`}
+          onClick={(e) => handleScrollTo(e, category.name.toLocaleLowerCase())}
+        >
           {category.name}
         </a>
       ))}

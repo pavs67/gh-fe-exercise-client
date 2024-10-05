@@ -1,4 +1,6 @@
 .category-list {
+  position: sticky;
+  top: 50px;
   display: flex;
   flex-direction: column;
   gap: 5px;
