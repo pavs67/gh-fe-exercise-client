@@ -122,7 +122,7 @@ export default function Page({}: CartProps) {
           {checkoutComplete && (
             <>
               <h1>Success</h1>
-              <p>You're all done!</p>
+              <p>You&apos;re all done!</p>
             </>
           )}
 
@@ -136,8 +136,9 @@ export default function Page({}: CartProps) {
                 <div className="cart-list">
                   {data.products
                     .filter((i) => i.quantity > 0)
-                    .map((product) => (
+                    .map((product, index) => (
                       <BasketItem
+                        key={index}
                         product={product.product}
                         quantity={product.quantity}
                         handleUpdateCart={handleUpdateCart}

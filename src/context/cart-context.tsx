@@ -156,7 +156,7 @@ const CartContextProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
       createNewOrder,
       clearCart: () => dispatch({ type: actions.CLEAR_CART }),
     }),
-    [state.cartItems, loading, state.orderId]
+    [state.cartItems, loading, state.orderId, createNewOrder, state.cartQuantity, state.cartTotal]
   );
 
   return <CartContext.Provider value={value}>{props.children}</CartContext.Provider>;
