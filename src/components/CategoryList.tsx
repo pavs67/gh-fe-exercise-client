@@ -11,6 +11,7 @@ const CategoryList: FC<CategoryListProps> = () => {
 
   const getCategories = async (cont: AbortController) => {
     setLoading(true);
+    setError(false);
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
@@ -31,9 +32,11 @@ const CategoryList: FC<CategoryListProps> = () => {
         if (error.name === "AbortError") {
           console.log("Fetch aborted");
         } else {
+          setError(true);
           console.error("Error fetching categories:", error.message);
         }
       } else {
+        setError(true);
         console.error("Unexpected error:", error);
       }
     } finally {
@@ -73,6 +76,10 @@ const CategoryList: FC<CategoryListProps> = () => {
   return (
     <div className="category-list">
       <h3>Categories</h3>
+
+      {loading && "Loading..."}
+
+      {error && "There was an error"}
 
       {categories.map((category, index) => (
         <a

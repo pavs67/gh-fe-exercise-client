@@ -74,8 +74,8 @@ export default function Page({ products, error }: ProductListProps) {
           </aside>
 
           <div className="product-page__products">
-            {router.isFallback ? (
-              <div>Loading</div>
+            {groupedProducts.length === 0 && !error ? (
+              <div>Loading...</div>
             ) : (
               <>
                 {error ? (
