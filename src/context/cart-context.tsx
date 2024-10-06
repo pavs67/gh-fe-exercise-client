@@ -51,12 +51,12 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       if (existingItemIndex >= 0) {
         updatedItems[existingItemIndex].quantity += 1;
       } else {
-        updatedItems.push({ id: action.product.id, quantity: 1 });
+        updatedItems.push({ id: action.product.id, price: action.product.price, quantity: 1 });
       }
 
       const updatedCartQuantity = updatedItems.reduce((total, item) => total + item.quantity, 0);
       const updatedCartTotal = updatedItems.reduce(
-        (total, item) => total + item.quantity * action.product.price,
+        (total, item) => total + item.quantity * item.price,
         0
       );
 
@@ -81,7 +81,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         // Recalculate cart total and quantity
         const updatedCartQuantity = filteredItems.reduce((total, item) => total + item.quantity, 0);
         const updatedCartTotal = filteredItems.reduce(
-          (total, item) => total + item.quantity * action.product.price,
+          (total, item) => total + item.quantity * item.price,
           0
         );
 
