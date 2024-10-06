@@ -12,7 +12,7 @@ interface CartProps {}
 export default function Page({}: CartProps) {
   const [data, setData] = useState<CheckOutItems["products"] | null>();
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<"getCheckout" | "updateCart" | "">("");
+  const [error, setError] = useState<"getCheckout" | "updateCart" | "checkout" | "">("");
   const [checkoutComplete, setCheckoutComplete] = useState(false);
 
   const { incrementItem, decrementItem, loading, orderId, clearCart } = useContext(CartContext);
@@ -87,6 +87,7 @@ export default function Page({}: CartProps) {
 
   const handleCheckout = async () => {
     setLoading(true);
+    setError("");
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}/buy`, {
@@ -96,14 +97,14 @@ export default function Page({}: CartProps) {
         },
       });
 
-      if (res.status === 204) {
-        setCheckoutComplete(true);
-        clearCart();
-      } else {
-        setCheckoutComplete(false);
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
       }
+
+      setCheckoutComplete(true);
+      clearCart();
     } catch (error) {
-      setError(true);
+      setError("checkout");
       setCheckoutComplete(false);
     } finally {
       setLoading(false);
@@ -140,9 +141,7 @@ export default function Page({}: CartProps) {
             <>
               <h1 className="cart__title">Your basket</h1>
 
-              {isLoading && <div>Loading</div>}
-
-              <div className="cart__inner">
+              <div className={`cart__inner ${isLoading ? "cart__inner--loading" : ""}`}>
                 <div className="cart-list">
                   {data
                     .filter((i) => i.quantity > 0)
@@ -177,6 +176,7 @@ export default function Page({}: CartProps) {
               {error === "updateCart" && (
                 <p>There was an error updating your cart please try again</p>
               )}
+              {error === "checkout" && <p>There was an error checking out please try again</p>}
             </>
           )}
         </div>

@@ -5,6 +5,10 @@
     gap: 30px;
     align-items: flex-start;
 
+    &--loading {
+      opacity: 0.5;
+    }
+
     @media (max-width: 900px) {
       flex-wrap: wrap;
     }
