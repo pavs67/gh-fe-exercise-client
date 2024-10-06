@@ -41,12 +41,17 @@ export const getStaticProps: GetStaticProps = async () => {
 export default function Page({ products, error }: ProductListProps) {
   const router = useRouter();
   const { cartItems, cartQuantity, createNewOrder, loading } = useContext(CartContext);
-  const [groupedProducts, setGroupedProducts] = useState<GroupedProducts[]>([]);
+  const [groupedProducts, setGroupedProducts] = useState<GroupedProducts[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [addToCartError, setAddToCartError] = useState(false);
 
   useEffect(() => {
-    if (products && products.length > 0) {
-      setGroupedProducts(groupSortProducts(products));
+    if (products) {
+      setIsLoading(false);
+
+      if (products.length > 0) {
+        setGroupedProducts(groupSortProducts(products));
+      }
     }
   }, [products]);
 
@@ -68,45 +73,51 @@ export default function Page({ products, error }: ProductListProps) {
 
       <div className="container">
         <h1>Products</h1>
+
         <div className="product-page">
           <aside className="product-page__sidebar">
             <CategoryList />
           </aside>
 
           <div className="product-page__products">
-            {groupedProducts.length === 0 && !error ? (
+            {isLoading ? (
               <div>Loading...</div>
             ) : (
               <>
                 {error ? (
                   <div>Error loading products. Please try again later.</div>
                 ) : (
-                  groupedProducts.map((group) => (
-                    <div
-                      className="product-list-group"
-                      id={group.category.toLowerCase()}
-                      key={group.category}
-                    >
-                      <h2>
-                        {group.category} ({group.products.length})
-                      </h2>
+                  <>
+                    {groupedProducts && groupedProducts.length === 0 && "No products found"}
 
-                      <div className="product-list">
-                        {group.products.map((product) => (
-                          <ProductCard
-                            product={product}
-                            key={product.id}
-                            selected={cartItems.findIndex((i) => i.id === product.id) >= 0}
-                          >
-                            <ProductCard.Image />
-                            <ProductCard.Title />
-                            <ProductCard.Price />
-                            <ProductCard.AddToCartBtn />
-                          </ProductCard>
-                        ))}
-                      </div>
-                    </div>
-                  ))
+                    {groupedProducts &&
+                      groupedProducts.map((group) => (
+                        <div
+                          className="product-list-group"
+                          id={group.category.toLowerCase()}
+                          key={group.category}
+                        >
+                          <h2>
+                            {group.category} ({group.products.length})
+                          </h2>
+
+                          <div className="product-list">
+                            {group.products.map((product) => (
+                              <ProductCard
+                                product={product}
+                                key={product.id}
+                                selected={cartItems.findIndex((i) => i.id === product.id) >= 0}
+                              >
+                                <ProductCard.Image />
+                                <ProductCard.Title />
+                                <ProductCard.Price />
+                                <ProductCard.AddToCartBtn />
+                              </ProductCard>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                  </>
                 )}
               </>
             )}
