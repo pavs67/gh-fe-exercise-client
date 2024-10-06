@@ -17,7 +17,7 @@ const Header: FC<HeaderProps> = ({ reduced }) => {
         <div className="container">
           <div className="header__inner">
             <Link href="/">
-              <Image src="/cosm-logo.png" alt="Cosm logo" width={100} height={29} />
+              <Image src="/cosm-logo.png" alt="Cosm logo" width={100} height={29} priority={true} />
             </Link>
 
             {!reduced && cartQuantity > 0 && (
