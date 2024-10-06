@@ -58,7 +58,7 @@ const CategoryList: FC<CategoryListProps> = () => {
       const element = document.getElementById(el);
 
       if (element) {
-        const offset = 50;
+        const offset = 80;
         const pos = element.getBoundingClientRect().top;
         const top = pos + window.scrollY - offset;
 

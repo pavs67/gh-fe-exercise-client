@@ -51,7 +51,7 @@ const BasketItem: BasketItemComponent = ({ product, quantity, handleUpdateCart, 
 const BasketImage: FC = () => {
   const { product } = useBasketItemContext();
   return (
-    <div className="cart-item__image">
+    <div className="cart-item__panel cart-item__image">
       <Image src={product.image} alt={product.name} width={600} height={600} loading="lazy" />
     </div>
   );
@@ -59,19 +59,23 @@ const BasketImage: FC = () => {
 
 const Price: FC = () => {
   const { product } = useBasketItemContext();
-  return <div>£{product.price}</div>;
+  return <div className="cart-item__panel cart-item__price">£{product.price}</div>;
 };
 
 const Title: FC = () => {
   const { product } = useBasketItemContext();
-  return <h3 className="cart-item__title">{product.name}</h3>;
+  return (
+    <div className="cart-item__panel cart-item__product-name">
+      <h3 className="cart-item__title">{product.name}</h3>
+    </div>
+  );
 };
 
 const UpdateQuantity: FC = () => {
   const { product, quantity, handleUpdateCart } = useBasketItemContext();
 
   return (
-    <div className="cart-item__btns">
+    <div className="cart-item__panel cart-item__btns">
       <button
         className="btn btn--small cart-item__decrease"
         onClick={() => handleUpdateCart(product, quantity - 1, "decrement")}

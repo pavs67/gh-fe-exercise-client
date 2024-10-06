@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import Link from "next/link";
 import React from "react";
 import { useContext, useEffect, useState } from "react";
@@ -9,26 +10,33 @@ import { CheckOutItems, Product } from "~/types/type";
 interface CartProps {}
 
 export default function Page({}: CartProps) {
-  const [data, setData] = useState<CheckOutItems | null>(null);
+  const [data, setData] = useState<CheckOutItems["products"] | null>();
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<"getCheckout" | "updateCart" | "">("");
   const [checkoutComplete, setCheckoutComplete] = useState(false);
 
   const { incrementItem, decrementItem, loading, orderId, clearCart } = useContext(CartContext);
 
   const getCheckoutItems = async (orderId: number) => {
+    setError("");
     setLoading(true);
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`);
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
+      }
+
       const resData: CheckOutItems = await res.json();
 
       if (resData.id !== undefined) {
-        setData(resData);
+        const products = cloneDeep(resData.products).sort((a, b) => a.product.id - b.product.id);
+
+        setData(products);
       }
     } catch (error) {
-      setError(true);
-      setData(null);
+      setError("getCheckout");
     } finally {
       setLoading(false);
     }
@@ -40,10 +48,11 @@ export default function Page({}: CartProps) {
     type: "increment" | "decrement"
   ) => {
     if (orderId) {
+      setError("");
       setLoading(true);
 
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -55,12 +64,15 @@ export default function Page({}: CartProps) {
           }),
         });
 
+        if (!res.ok) {
+          throw new Error(`Server error: ${res.status}`);
+        }
+
         getCheckoutItems(orderId);
 
         type === "increment" ? incrementItem(product) : decrementItem(product);
       } catch (error) {
-        setError(true);
-        setData(null);
+        setError("updateCart");
       } finally {
         setLoading(false);
       }
@@ -98,12 +110,10 @@ export default function Page({}: CartProps) {
     }
   };
 
-  const totalCost = data?.products.reduce(
+  const totalCost = data?.reduce(
     (total, product) => total + product.quantity * product.product.price,
     0
   );
-
-  if (error) return <p>There was an error loading your cart please try again</p>;
 
   return (
     <>
@@ -134,7 +144,7 @@ export default function Page({}: CartProps) {
 
               <div className="cart__inner">
                 <div className="cart-list">
-                  {data.products
+                  {data
                     .filter((i) => i.quantity > 0)
                     .map((product, index) => (
                       <BasketItem
@@ -160,6 +170,13 @@ export default function Page({}: CartProps) {
                   </button>
                 </div>
               </div>
+
+              {error === "getCheckout" && (
+                <p>There was an error loading your cart please try again</p>
+              )}
+              {error === "updateCart" && (
+                <p>There was an error updating your cart please try again</p>
+              )}
             </>
           )}
         </div>

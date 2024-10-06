@@ -1,5 +1,4 @@
 import { GetStaticProps } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useState, useEffect } from "react";
 import CategoryList from "~/components/CategoryList";
@@ -14,7 +13,7 @@ interface ProductListProps {
   error: boolean;
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async () => {
   let products: Product[] = [];
   let error = false;
 
@@ -35,7 +34,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       products,
       error,
     },
-    revalidate: 10,
+    revalidate: 30,
   };
 };
 
@@ -79,34 +78,36 @@ export default function Page({ products, error }: ProductListProps) {
               <div>Loading</div>
             ) : (
               <>
-                {error && <div>Error loading products. Please try again later.</div>}
+                {error ? (
+                  <div>Error loading products. Please try again later.</div>
+                ) : (
+                  groupedProducts.map((group) => (
+                    <div
+                      className="product-list-group"
+                      id={group.category.toLowerCase()}
+                      key={group.category}
+                    >
+                      <h2>
+                        {group.category} ({group.products.length})
+                      </h2>
 
-                {groupedProducts.map((group) => (
-                  <div
-                    className="product-list-group"
-                    id={group.category.toLowerCase()}
-                    key={group.category}
-                  >
-                    <h2>
-                      {group.category} ({group.products.length})
-                    </h2>
-
-                    <div className="product-list">
-                      {group.products.map((product) => (
-                        <ProductCard
-                          product={product}
-                          key={product.id}
-                          selected={cartItems.findIndex((i) => i.id === product.id) >= 0}
-                        >
-                          <ProductCard.Image />
-                          <ProductCard.Title />
-                          <ProductCard.Price />
-                          <ProductCard.AddToCartBtn />
-                        </ProductCard>
-                      ))}
+                      <div className="product-list">
+                        {group.products.map((product) => (
+                          <ProductCard
+                            product={product}
+                            key={product.id}
+                            selected={cartItems.findIndex((i) => i.id === product.id) >= 0}
+                          >
+                            <ProductCard.Image />
+                            <ProductCard.Title />
+                            <ProductCard.Price />
+                            <ProductCard.AddToCartBtn />
+                          </ProductCard>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </>
             )}
           </div>
