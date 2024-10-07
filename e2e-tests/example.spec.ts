@@ -1,18 +1,17 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from "@playwright/test";
 
-test('has title', async ({ page }) => {
-	await page.goto('https://playwright.dev/')
+test("should add product to basket, navigate to cart, and proceed to checkout successfully", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:3000/");
 
-	// Expect a title "to contain" a substring.
-	await expect(page).toHaveTitle(/Playwright/)
-})
+  await page.locator(".product-card__btn-add-to-basket").first().click();
 
-test('get started link', async ({ page }) => {
-	await page.goto('https://playwright.dev/')
+  await page.getByRole("button", { name: "View basket" }).click();
 
-	// Click the get started link.
-	await page.getByRole('link', { name: 'Get started' }).click()
+  await expect(page).toHaveURL("http://localhost:3000/cart", { timeout: 2000 });
 
-	// Expects page to have a heading with the name of Installation.
-	await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible()
-})
+  await page.getByRole("button", { name: "Secure Checkout" }).click();
+
+  await expect(page.getByRole("heading", { name: "Success" })).toBeVisible();
+});
